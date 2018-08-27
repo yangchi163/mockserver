@@ -1,0 +1,31 @@
+base:
+  #request节点一定要有
+    request:
+        host: http://t.jufandev.com:33084
+        method: POST
+        isSuccess: true
+  #response节点中的值是默认值，可以没有
+    response:
+        statuscode: 200
+
+api:
+    用户:
+        登录:
+            request:
+                method: GET
+                path: /mp/user/login
+            success:
+                statuscode: 200
+                headers:
+                    token: hehehh
+                responsebody:
+                    name: xiaohei
+                    age: 9
+            fail:
+                statuscode: 300
+                headers:
+                    token: wuxiao
+                responsebody: cuowu
+
+
+
