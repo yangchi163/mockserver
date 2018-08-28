@@ -12,29 +12,33 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.util.Map;
 
 public class DoMain {
     public static Map<String,HttpEntity> resultMap;
+    public static int port;
+
     public static void main(String[] arg) throws Exception {
         //生成resultMap
         String filePath = System.getProperty("user.dir") + File.separator +"src" + File.separator + "main"
                 + File.separator + "resources" + File.separator + "data.yaml";
         ParseData parseData = new ParseData();
         resultMap = parseData.getResultMap(filePath);
+        port = parseData.getPort();
         //启动服务
-        domain();
+        domain(port);
     }
 
     /**
      * 启动服务
      * @throws Exception
      */
-    public static void domain() throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+    public static void domain(int port) throws Exception {
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new TestHandler());
         server.start();
-        System.out.println("the service is started");
+        System.out.println("the service is started at " + port);
     }
 
 
@@ -45,7 +49,8 @@ public class DoMain {
                     //获取请求方法
                     String method = exchange.getRequestMethod();
                     //获取请求path
-                    String path = exchange.getRequestURI().toString();
+                    URI uri = exchange.getRequestURI();
+                    String path = uri.getPath();
                     System.out.println(method+ "    " + path);
                     //声明要返回的数据
                     String response = "the path does not exsit";

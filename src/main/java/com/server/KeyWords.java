@@ -9,6 +9,7 @@ public class KeyWords {
     public static final String METHOD = "method";
     public static final String ISSUCCESS = "isSuccess";
     public static final String PATH = "path";
+    public static final String PORT = "port";
 
     public static final String RESPONSE = "response";
     public static final String SUCCESS = "success";

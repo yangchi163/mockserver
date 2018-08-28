@@ -9,10 +9,20 @@ import static com.server.KeyWords.*;
 
 public class ParseData {
     private Map<String,HttpEntity> resultMap;
+    private String host;
+    private int port;
 
     public Map<String, HttpEntity> getResultMap(String filePath) throws Exception {
         parseData(filePath);
         return resultMap;
+    }
+
+    public String getHost(){
+        return host;
+    }
+
+    public int getPort(){
+        return port;
     }
 
     private void parseData(String filePath) throws Exception {
@@ -22,6 +32,12 @@ public class ParseData {
         for (Object keyIndataFromFile : dataFromFile.keySet()){
             Map base = (Map) getValueFromMap(dataFromFile,null,BASE);
             Map apis = (Map) getValueFromMap(dataFromFile,null,API);
+
+            //解析host
+            Map requestFromBase = (Map) getValueFromMap(base,null,REQUEST);
+            String hostStr = (String) getValueFromMap(requestFromBase,null,HOST);
+            host = parseHost(hostStr,HOST);
+            port = Integer.parseInt(parseHost(hostStr,PORT));
             //模块层
             for (Object moduleKey : apis.keySet()){
                 Map moduleInApis = (Map) apis.get(moduleKey);
@@ -107,6 +123,24 @@ public class ParseData {
             if (target2.containsKey(key)){
                 res = target2.get(key);
             }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @param url 如：http://t.jufandev.com:33084
+     * @param name 枚举：host,port
+     * @return
+     */
+    private String parseHost(String url,String name) {
+        String res = null;
+        int flag = url.indexOf(":",7);
+        if (HOST.equals(name)){
+            res = url.substring(0,flag);
+        }
+        if (PORT.equals(name)){
+            res = url.substring(flag + 1);
         }
         return res;
     }
